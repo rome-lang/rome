@@ -4,6 +4,7 @@ use std::num::ParseFloatError;
 
 #[derive(Clone)]
 pub enum Oexp {
+    Boolean(bool),
     Symbol(String),
     Number(f64),
     List(Vec<Oexp>),
@@ -13,6 +14,7 @@ pub enum Oexp {
 impl fmt::Display for Oexp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let str = match self {
+            Oexp::Boolean(b) => b.to_string(),
             Oexp::Symbol(s) => s.clone(),
             Oexp::Number(n) => n.to_string(),
             Oexp::List(list) => {
@@ -84,11 +86,17 @@ fn read_seq<'a>(tokens: &'a [String]) ->
 }
 
 fn parse_atom(token: &str) -> Oexp {
-  let maybe_float: Result<f64, ParseFloatError> = token.parse();
-  match maybe_float {
-      Ok(v) => Oexp::Number(v),
-      Err(_) => Oexp::Symbol(token.to_string().clone()) // else parse as symbol
-  }
+    match token.as_ref() {
+        "true" => Oexp::Boolean(true),
+        "false" => Oexp::Boolean(false),
+        _ => {
+            let maybe_float: Result<f64, ParseFloatError> = token.parse();
+            match maybe_float {
+                Ok(v) => Oexp::Number(v),
+                Err(_) => Oexp::Symbol(token.to_string().clone()) // else parse as symbol
+            }
+        }
+    }
 }
 
 pub fn new_core_model() -> Model {
@@ -128,6 +136,7 @@ pub fn eval(exp: &Oexp, env: &mut Model) -> Result<Oexp, RomeError> {
             .ok_or(RomeError::OperatorError(format!("Unexpected symbok k='{}'", k)))
             .map(|x| x.clone()),
         Oexp::Number(_a) => Ok(exp.clone()),
+        Oexp::Boolean(_b) => Ok(exp.clone()),
         Oexp::List(list) => {
             let foo = list.last() // the last form must be a known function
                 .ok_or(RomeError::OperatorError("Did not expect an empty list here".to_string()))?;
