@@ -102,7 +102,7 @@ a b add
 
 Also we need one last thing. Take a leaf out of Elixir/ELM/ReasonML pipe operator. |> We will be using this too in our approach to have fewer parentheses.
 
-## Examples of how Rome might look:
+## Examples of how Roman might look:
 
 
 
@@ -110,7 +110,7 @@ Assign `5` to `a`.
 
 
 ```
-a = 5 def
+a = 5 .
 ```
 
 Check if a is greather than b
@@ -153,17 +153,18 @@ a = (11 19 *, 9 23 *, +) def
 Define a function to add 3 to any number
 
 ```
-add3 (a) (a 3 +) fn
+add3 = (a b) (a + b .) fn
 
 ```
 
-or using the lambda method (=> stands in for lambda)
+or using the lambda method. fn with => means lambda.
 
 ```
-add3 = ((a) (a 3 +) =>) def
+add3 = ((a b) => (a + b .) fn).
 
 ```
 
+With = fn creates a named function. with => creates un-named function.
 
 Yeah you can't get rid of  *all* the brackets I think.
 
@@ -171,13 +172,13 @@ Yeah you can't get rid of  *all* the brackets I think.
 Function calls:
 
 ```
-4 add3 .
+4 add3
 ```
 
 with assigns
 
 ```
-a = 4 add3
+a = (4 add3) .
 ```
 
 
@@ -211,7 +212,7 @@ will eval to
 
 ```
 
-x if (x > 0) ?
+x if (x > 0) else -x ?
 
 ```
 
@@ -219,12 +220,12 @@ x if (x > 0) ?
 Can we do else case like this?
 
 ```
-x if (x > 0) or else -x ?
+x if (x > 0) else -x ?
 
 ```
 
 ```
-x if (x > 0 ?) else 0 if (x = 0 ?) else -x if (x < 0 ?) or else 1000000 ?
+x if (x > 0 ?) or 0 if (x = 0 ?) or -x if (x < 0 ?) else 1000000 ?
 
 ```
 
@@ -237,7 +238,7 @@ x if (x > 0 ?) else 0 if (x = 0 ?) else -x if (x < 0 ?) or else 1000000 ?
 
 
 ```bash
-O.0: (+ 2 3)
+    : (+ 2 3)
 
 ```
 
@@ -259,12 +260,12 @@ quote '
 bind &
 ```
 ```
-x = (1 2 3)' def
+x = (1 2 3)' .
 
 
 ```
 
-Get h, t, r, e, s, p
+Get h, t, l, b, r, o, m, e
 
 ```
 (x 1 2 3)'t
@@ -282,14 +283,14 @@ We will represent what NASA calls T0 as `.0` or `.` to denote *now*. And T+1 as 
 
 ```
 .-1
--- is same as
+-- is same as t-1
 ~1
 -- not the same as
 
 .1 - 1 ? --: .0
 
 -- now is
-.0
+.
 
 -- same as
 .
@@ -300,7 +301,7 @@ We will represent what NASA calls T0 as `.0` or `.` to denote *now*. And T+1 as 
 
 `--: $RESULT` asserts that it "prints" that output. 
 
-Time flows to the right, so `Augustine.Arun` in left to right languages.
+
 
 Will use ( for the beginning of an expression and ) for the end.
 ^ for beginning of line and $ for the end.

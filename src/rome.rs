@@ -131,29 +131,95 @@ fn parse_single_float(exp: &Oexp) -> Result<f64, RomeError> {
 
 // The eval function 
 pub fn eval(exp: &Oexp, env: &mut Model) -> Result<Oexp, RomeError> {
-    match exp {
+    match exp { // 1
         Oexp::Symbol(k) => env.store.get(k)
             .ok_or(RomeError::OperatorError(format!("Unexpected symbok k='{}'", k)))
             .map(|x| x.clone()),
         Oexp::Number(_a) => Ok(exp.clone()),
         Oexp::Boolean(_b) => Ok(exp.clone()),
         Oexp::List(list) => {
-            let foo = list.last() // the last form must be a known function
+            let last_form = list.last() // the last form must be a known function
                 .ok_or(RomeError::OperatorError("Did not expect an empty list here".to_string()))?;
             let len = list.len();
-            let arg_forms = &list[0..(len - 1)];
-            let func_eval = eval(foo, env)?;
-            match func_eval {
-                Oexp::Function(f) => {
-                    let args_eval = arg_forms.iter()
-                        .map(|x| eval(x, env))
-                        .collect::<Result<Vec<Oexp>, RomeError>>();
-                    f(&args_eval?)
-                },
-                _ => Err(RomeError::OperatorError("The last form must be a function".to_string())),
+            // Let's first check for built-in operators: `def`, `def.` `.` all are forms of define
+            // and `?` as a way to check conditions in the form of 
+            // `something if (condition is true) else somethingelse ?`
+            let arg_forms = list.get(0..len-2).ok_or(RomeError::OperatorError("unable to get forms".to_string()))?;
+            match eval_built_in_form(last_form, arg_forms, env) { // 2
+                Some(res) => res,
+                None => {
+                    let arg_forms = &list[0..(len - 1)];
+                    let func_eval = eval(last_form, env)?;
+                    match func_eval { // 3
+                        Oexp::Function(f) => {
+                            let args_eval = arg_forms.iter()
+                                .map(|x| eval(x, env))
+                                .collect::<Result<Vec<Oexp>, RomeError>>();
+                            f(&args_eval?)
+                        },
+                        _ => Err(RomeError::OperatorError("The last form must be a function".to_string())),
 
-            }
+                    } // match 3
+                }
+            } // match 2
         },
         Oexp::Function(_) => Err(RomeError::OperatorError("I don't know this function".to_string())),
+    } // match 1
+} // end eval
+
+fn eval_built_in_form(exp: &Oexp, arg_forms: &[Oexp], env: &mut Model) -> Option<Result<Oexp, RomeError>> {
+    match exp {
+        Oexp::Symbol(s) =>
+            match s.as_ref() {
+                "?" => Some(eval_query(arg_forms, env)),
+                "." => Some(eval_define(arg_forms, env)),
+                _ => None,
+            },
+            _ => None,
+    }
+}
+
+fn eval_query(arg_forms: &[Oexp], env: &mut Model) -> Result<Oexp, RomeError> {
+    let subject = arg_forms.get(0).ok_or(
+        RomeError::OperatorError("expected a subject as first form in conditional".to_string()))?;
+    let verb = arg_forms.get(1).ok_or(
+        RomeError::OperatorError("expected a verb as second form in conditional".to_string()))?;
+    let object = arg_forms.get(2).ok_or(
+        RomeError::OperatorError("expected an object as third form in conditional".to_string()))?;
+    match verb {
+        Oexp::Symbol(v) => 
+            match v.as_ref() {
+                ">" => unimplemented!(),
+                "<" => unimplemented!(),
+                "=" => unimplemented!(),
+                ">=" => unimplemented!(),
+                "=<" => unimplemented!(),
+                "~=" => unimplemented!(),
+                "if" => unimplemented!(),
+                _ => unimplemented!(),
+            },
+        _ => unimplemented!(),
+    }
+}
+
+fn eval_define(arg_forms: &[Oexp], env: &mut Model) -> Result<Oexp, RomeError> {
+     let subject = arg_forms.get(0).ok_or(
+        RomeError::OperatorError("expected a subject as first form in definition".to_string()))?;
+    let verb = arg_forms.get(1).ok_or(
+        RomeError::OperatorError("expected a verb as second form in definition".to_string()))?;
+    let object = arg_forms.get(2).ok_or(
+        RomeError::OperatorError("expected an object as third form in definition".to_string()))?;
+    match verb {
+        Oexp::Symbol(v) => 
+            match v.as_ref() {
+                "=" => unimplemented!(),
+                ">" => unimplemented!(), // assert that subject is greater than object
+                "<" => unimplemented!(), // let it be known as fact that subject is less than object from now on.
+                ">=" => unimplemented!(),
+                "=<" => unimplemented!(),
+                "~=" => unimplemented!(),
+                _ => unimplemented!(),
+            },
+        _ => unimplemented!(),
     }
 }
