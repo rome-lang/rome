@@ -1,5 +1,10 @@
 # Roman: A thesis for Lisp in the 4th dimension, with fewer parenthesis
 
+Roman is Lisp extended to the fourth dimension. S-expressions, the basis of Lisp can be considered 2-dimensional since it expands (s : s.s). What if we had o-expressions instead. Adding two more dimensions to Lisp?
+
+(O := O.O.O.O)
+
+Roman is a research language starting with o-expressions as the basis. I have an intuition that by doing so, we will end up with a programming language that looks more and more like human languages (for e.g english) which has subject, verb, object and tenses (to express time related ideas).
 
 ## Introduction 
 
