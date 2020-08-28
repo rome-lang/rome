@@ -251,14 +251,26 @@ fn eval_if_query(subject: &Oexp, object: &Oexp, rem_args: &[Oexp], env: &mut Mod
 fn eval_define(arg_forms: &[Oexp], env: &mut Model) -> Result<Oexp, RomeError> {
      let subject = arg_forms.get(0).ok_or(
         RomeError::OperatorError("expected a subject as first form in definition".to_string()))?;
+     let name_str = match subject {
+         Oexp::Symbol(s) => Ok(s.clone()),
+         _ => Err(RomeError::OperatorError("Expected subject to be an oexp of type symbol".to_string())),
+     }?;
     let verb = arg_forms.get(1).ok_or(
         RomeError::OperatorError("expected a verb as second form in definition".to_string()))?;
     let object = arg_forms.get(2).ok_or(
         RomeError::OperatorError("expected an object as third form in definition".to_string()))?;
+    if arg_forms.len() > 3 {
+        return Err(RomeError::OperatorError("A definition can have only subject, verb and object. I can't handle more...".to_string()))
+    }
     match verb {
         Oexp::Symbol(v) => 
             match v.as_ref() {
-                "=" => unimplemented!(),
+                "=" => {
+                    let object_eval = eval(object, env)?;
+                    env.store.insert(name_str, object_eval);
+
+                    Ok(subject.clone())
+                },
                 ">" => unimplemented!(), // assert that subject is greater than object
                 "<" => unimplemented!(), // let it be known as fact that subject is less than object from now on.
                 ">=" => unimplemented!(),
