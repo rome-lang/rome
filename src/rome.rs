@@ -190,7 +190,7 @@ fn eval_query(arg_forms: &[Oexp], env: &mut Model) -> Result<Oexp, RomeError> {
     match verb {
         Oexp::Symbol(v) => 
             match v.as_ref() {
-                ">" => eval_gt_query(subject, object), 
+                ">" => eval_gt_query(subject, object, env), 
                 "<" => unimplemented!(),
                 "=" => unimplemented!(),
                 ">=" => unimplemented!(),
@@ -207,7 +207,7 @@ fn eval_query(arg_forms: &[Oexp], env: &mut Model) -> Result<Oexp, RomeError> {
     }
 }
 
-fn eval_gt_query(subject: &Oexp, object: &Oexp) -> Result<Oexp, RomeError> {
+fn eval_gt_query(subject: &Oexp, object: &Oexp, _env: &mut Model) -> Result<Oexp, RomeError> {
         match (subject, object) { 
         (Oexp::Number(a), Oexp::Number(b)) => Ok(Oexp::Boolean(a > b)),
         _ => Err(RomeError::OperatorError("Can compare only two numbers (as of now)".to_string())),
