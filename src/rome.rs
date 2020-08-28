@@ -144,7 +144,7 @@ pub fn eval(exp: &Oexp, env: &mut Model) -> Result<Oexp, RomeError> {
             // Let's first check for built-in operators: `def`, `def.` `.` all are forms of define
             // and `?` as a way to check conditions in the form of 
             // `something if (condition is true) else somethingelse ?`
-            let arg_forms = list.get(0..len-2).ok_or(RomeError::OperatorError("unable to get forms".to_string()))?;
+            let arg_forms = list.get(0..len-1).ok_or(RomeError::OperatorError("unable to get forms".to_string()))?;
             match eval_built_in_form(last_form, arg_forms, env) { // 2
                 Some(res) => res,
                 None => {
@@ -180,6 +180,7 @@ fn eval_built_in_form(exp: &Oexp, arg_forms: &[Oexp], env: &mut Model) -> Option
 }
 
 fn eval_query(arg_forms: &[Oexp], env: &mut Model) -> Result<Oexp, RomeError> {
+    let len = arg_forms.len();
     let subject = arg_forms.get(0).ok_or(
         RomeError::OperatorError("expected a subject as first form in conditional".to_string()))?;
     let verb = arg_forms.get(1).ok_or(
@@ -189,16 +190,61 @@ fn eval_query(arg_forms: &[Oexp], env: &mut Model) -> Result<Oexp, RomeError> {
     match verb {
         Oexp::Symbol(v) => 
             match v.as_ref() {
-                ">" => unimplemented!(),
+                ">" => eval_gt_query(subject, object, env), 
                 "<" => unimplemented!(),
                 "=" => unimplemented!(),
                 ">=" => unimplemented!(),
                 "=<" => unimplemented!(),
                 "~=" => unimplemented!(),
-                "if" => unimplemented!(),
+                "if" => {
+                    let rem_args = arg_forms.get(3..len).ok_or(
+                        RomeError::OperatorError("expected an else/or branch to if".to_string()))?;
+                    eval_if_query(subject, object, rem_args, env)
+                },
                 _ => unimplemented!(),
             },
         _ => unimplemented!(),
+    }
+}
+
+fn eval_gt_query(subject: &Oexp, object: &Oexp, env: &mut Model) -> Result<Oexp, RomeError> {
+        match (subject, object) { 
+        (Oexp::Number(a), Oexp::Number(b)) => Ok(Oexp::Boolean(a > b)),
+        _ => Err(RomeError::OperatorError("Can compare only two numbers (as of now)".to_string())),
+        }
+
+}
+
+fn eval_if_query(subject: &Oexp, object: &Oexp, rem_args: &[Oexp], env: &mut Model) -> Result<Oexp, RomeError> {
+    let predicate = eval(object, env)?;
+    match predicate {
+        Oexp::Boolean(b) => {
+            match b { // 1
+                true => eval(subject, env),
+                false => {
+                    // handle else/or branch
+                    let keyword = rem_args.get(0).ok_or(
+                        RomeError::OperatorError("expected else/or branch for if condition".to_string()))?;
+                    match keyword { // 2
+                        Oexp::Symbol(k) => {
+                        match k.as_ref() { // 3
+                            "else" => {
+                                let something_else = rem_args.get(1).ok_or(
+                                    RomeError::OperatorError("...else what?...".to_string()))?;
+                                eval(something_else, env)
+                            },
+                            "or" => {
+                                unimplemented!();
+                            },
+                            _ => Err(RomeError::OperatorError("Expected else or or after if condition".to_string())),
+                        } // match 3
+                        },
+                        _ => Err(RomeError::ReaderError("could not read this keyword".to_string())),
+                    } // match 2 
+                },
+            } // match 1
+        },
+        _ => Err(RomeError::OperatorError("Unexpected test form".to_string()))
     }
 }
 
