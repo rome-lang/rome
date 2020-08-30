@@ -250,10 +250,17 @@ fn eval_built_in_form(exp: &Oexp, arg_forms: &[Oexp], modl: &mut Model) -> Optio
                 "?" => Some(eval_query(arg_forms, modl)),
                 "." => Some(eval_define(arg_forms, modl)),
                 "fn" => Some(eval_function_def(arg_forms, modl)),
+                "!" => Some(eval_symbol(arg_forms, modl)),
                 _ => None,
             },
             _ => None,
     }
+}
+
+fn eval_symbol(arg_forms: &[Oexp], modl: &mut Model) -> Result<Oexp, RomeError> {
+    let subject = arg_forms.get(0).ok_or(
+        RomeError::OperatorError("expected a subject as first form in conditional".to_string()))?;
+    eval(subject, modl)
 }
 
 fn eval_query(arg_forms: &[Oexp], modl: &mut Model) -> Result<Oexp, RomeError> {
