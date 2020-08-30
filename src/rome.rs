@@ -57,7 +57,11 @@ pub struct Model<'a> {
     inner: Option<&'a Model<'a>>, // conventionally we use outer environment
 }
 
-pub fn tokenise(input: String) -> Vec<String> {
+pub fn tokenise(input_str: String) -> Vec<String> {
+    let mut input = String::from("(");
+    input.push_str(&input_str);
+    input.push_str(")");
+
     input
         .replace("(", " ( ")
         .replace(")", " ) ")
@@ -203,6 +207,11 @@ fn new_model_for_fn_def<'a>(
 fn parse_list_of_symbol_strings(form: Rc<Oexp>) -> Result<Vec<String>, RomeError> {
     let list = match form.as_ref() {
         Oexp::List(s) => Ok(s.clone()),
+        Oexp::Symbol(a) => {
+            let mut l = Vec::new();
+            l.push(Oexp::Symbol(a.clone()));
+            Ok(l)
+        }
         _ => Err(RomeError::ReaderError(
                 "Expected arg form to be a list".to_string()))
     }?;
