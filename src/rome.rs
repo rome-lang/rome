@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::fmt;
 use std::num::ParseFloatError;
+use std::rc::Rc;
 
 #[derive(Clone)]
 pub enum Oexp {
@@ -9,6 +10,13 @@ pub enum Oexp {
     Number(f64),
     List(Vec<Oexp>),
     Function(fn(&[Oexp]) -> Result<Oexp, RomeError>),
+    FunctionDef(Lambda)
+}
+
+#[derive(Clone)]
+pub struct Lambda {
+    params_exp : Rc<Oexp>,
+    body_exp: Rc<Oexp>,
 }
 
 impl fmt::Display for Oexp {
@@ -23,6 +31,7 @@ impl fmt::Display for Oexp {
                 format!("({})", xs.join(" , "))
             },
             Oexp::Function(_) => "Function: {}".to_string(),
+            Oexp::FunctionDef(_) => "Function Definition: {}".to_string(),
         };
 
         write!(f, "{}", str)
@@ -164,6 +173,7 @@ pub fn eval(exp: &Oexp, env: &mut Model) -> Result<Oexp, RomeError> {
             } // match 2
         },
         Oexp::Function(_) => Err(RomeError::OperatorError("I don't know this function".to_string())),
+        Oexp::FunctionDef(_) => Err(RomeError::OperatorError("I didn't expect this function definition here".to_string())),
     } // match 1
 } // end eval
 
@@ -173,6 +183,7 @@ fn eval_built_in_form(exp: &Oexp, arg_forms: &[Oexp], env: &mut Model) -> Option
             match s.as_ref() {
                 "?" => Some(eval_query(arg_forms, env)),
                 "." => Some(eval_define(arg_forms, env)),
+                "fn" => Some(eval_function_def(arg_forms, env)),
                 _ => None,
             },
             _ => None,
@@ -276,6 +287,34 @@ fn eval_define(arg_forms: &[Oexp], env: &mut Model) -> Result<Oexp, RomeError> {
                 ">=" => unimplemented!(),
                 "=<" => unimplemented!(),
                 "~=" => unimplemented!(),
+                _ => unimplemented!(),
+            },
+        _ => unimplemented!(),
+    }
+}
+
+
+fn eval_function_def(arg_forms: &[Oexp], _env: &mut Model) -> Result<Oexp, RomeError> {
+    let _len = arg_forms.len();
+    let verb = arg_forms.get(1).ok_or(
+        RomeError::OperatorError("expected a verb as second form in conditional".to_string()))?;
+    match verb {
+        Oexp::Symbol(v) => 
+            match v.as_ref() {
+                "=>" => {// anonymous-function definition
+                    let params = arg_forms.get(0).ok_or(
+                        RomeError::OperatorError(
+                            "expected a list of parameters as first form in anonymous function def"
+                            .to_string()))?;
+                    let body = arg_forms.get(2).ok_or(
+                        RomeError::OperatorError("expected function body as third form in function def".to_string()))?;
+
+                    Ok(Oexp::FunctionDef(Lambda {
+                        params_exp: Rc::new(params.clone()),
+                        body_exp: Rc::new(body.clone()),
+                    }))
+                }, 
+                "=" => unimplemented!(), // named-function definition
                 _ => unimplemented!(),
             },
         _ => unimplemented!(),
