@@ -81,7 +81,6 @@ pub fn parse<'a>(tokens: &'a [String]) -> Result<(Oexp, &'a [String]), RomeError
     }
 }
 
-
 fn read_seq<'a>(tokens: &'a [String]) -> 
                 Result<(Oexp, &'a [String]), RomeError> {
     let mut res: Vec<Oexp> = vec![]; // result
@@ -137,7 +136,6 @@ pub fn new_core_model<'a>() -> Model<'a> {
         );
     Model {store, inner: None}
 }
-
 
 fn parse_list_of_floats(args: &[Oexp]) -> Result<Vec<f64>, RomeError> {
     args
@@ -417,7 +415,6 @@ fn eval_define(arg_forms: &[Oexp], modl: &mut Model) -> Result<Oexp, RomeError> 
         _ => unimplemented!(),
     }
 }
-
 
 fn eval_function_def(arg_forms: &[Oexp], _env: &mut Model) -> Result<Oexp, RomeError> {
     let _len = arg_forms.len();
