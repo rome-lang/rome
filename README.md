@@ -286,12 +286,13 @@ The program language is itself called Roman which is short for **Recursive OMicr
 Plus you know……. the domain name was available.
 
 ## Thanks
-A special thanks to [Stepan](https://stopa.io/post/222), on whose tall shoulders, I stood, to figure out how to express all these ideas in Rust. He in turn based his Rusty Lisp interpreter on Norvig’s Lispy. 
+A special thanks to [Stepan](https://stopa.io/post/222), on whose tall shoulders, I stood, to figure out how to express all these ideas in Rust. He in turn based his Rusty Lisp interpreter on [Norvig’s Lispy](http://norvig.com/lispy.html).
 
-It was Paul Graham’s essays that introduced me to Lisp in one of his essays more than 7 years ago, along with Fred Brook’s mythical man month which expounded on the mind-altering experience that Lisp is. 
+It was [Paul Graham's essays](http://www.paulgraham.com/lisp.html) which introduced me to Lisp more than 10 years ago. And it was [Alan Kay](https://queue.acm.org/detail.cfm?id=1039523) along with [Fred Brook's mythical man-month](https://en.wikipedia.org/wiki/The_Mythical_Man-Month), [Michael's blog post on Lisp](http://www.michaelnielsen.org/ddi/lisp-as-the-maxwells-equations-of-software/) and of course the venerable [authors of SICP, Harold Abelson and Gerald Jay Sussman](https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs) who taught me about the mind altering experience that Lisp is. 
 
-To these four teachers, who may not realise that I am their student: Thank you! 
 
-And not in the least to my sincere thanks to the repl.it team who devised the programming language contest,  thereby unknowingly becoming my accountability partner to share this idea that took hold of me 7 years ago, and that only now I could put down in some semblance of coherent words and working code.
+To these teachers, who may not realise that I am their student: Thank you! 
 
-And to you dear reader, I say: so long and thanks for all the fish.
+And not in the least to my sincere thanks to the [repl.it team](https://repl.it/jam) who devised the programming language contest, thereby unknowingly becoming my accountability partner to share this idea that took hold of me 6 years ago, and that only now I could put down in some semblance of coherent words and working code.
+
+Finally also to you dear reader, I say: so long and thanks for all the fish.
