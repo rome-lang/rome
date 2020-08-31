@@ -12,9 +12,7 @@ The foundational idea of this programming language is simple enough to fit in a 
 
 So what does that buy us? What’s the key benefit? 
 
-The short version of the answer is: I don’t know (yet).
-
-The longer version is that, all I have currently, is an intuition that, by “climbing the dimensions” so to speak, the language will become more expressive. Perhaps even approaching closer to natural languages (e.g english) in ease of expression.
+All I have currently, is an intuition that, by “climbing the dimensions” so to speak, the language will become more expressive. Perhaps even approaching closer to natural languages (e.g english) in ease of expression.
 
 And since it has the additional property of being executable in comparison to natural languages, it just might help us “explore grander thoughts”. And of course, this is pure speculation at the moment .
 
