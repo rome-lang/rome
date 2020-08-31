@@ -125,6 +125,16 @@ pub fn new_core_model<'a>() -> Model<'a> {
             }
             )
         );
+    store.insert(
+        "*".to_string(),
+        Oexp::Function(
+            |args: &[Oexp]| -> Result<Oexp, RomeError> {
+                let prod = parse_list_of_floats(args)?.iter()
+                    .fold(1.0, |prod , a| prod * a);
+                Ok(Oexp::Number(prod))
+            }
+            )
+        );
     Model {store, inner: None}
 }
 
@@ -275,11 +285,13 @@ fn eval_query(arg_forms: &[Oexp], modl: &mut Model) -> Result<Oexp, RomeError> {
         Oexp::Symbol(v) => 
             match v.as_ref() {
                 ">" => eval_gt_query(subject, object, modl), 
-                "<" => unimplemented!(),
-                "=" => unimplemented!(),
-                ">=" => unimplemented!(),
-                "=<" => unimplemented!(),
-                "~=" => unimplemented!(),
+                "<" => eval_lt_query(subject, object, modl), 
+                "=" => eval_eq_query(subject, object, modl), 
+                "==" => eval_eq_query(subject, object, modl), 
+                ">=" => eval_geq_query(subject, object, modl), 
+                "=<" => eval_leq_query(subject, object, modl), 
+                "~=" => eval_neq_query(subject, object, modl), 
+                "!=" => eval_neq_query(subject, object, modl), 
                 "if" => {
                     let rem_args = arg_forms.get(3..len).ok_or(
                         RomeError::OperatorError("expected an else/or branch to if".to_string()))?;
@@ -294,6 +306,46 @@ fn eval_query(arg_forms: &[Oexp], modl: &mut Model) -> Result<Oexp, RomeError> {
 fn eval_gt_query(subject: &Oexp, object: &Oexp, _env: &mut Model) -> Result<Oexp, RomeError> {
         match (subject, object) { 
         (Oexp::Number(a), Oexp::Number(b)) => Ok(Oexp::Boolean(a > b)),
+        _ => Err(RomeError::OperatorError("Can compare only two numbers (as of now)".to_string())),
+        }
+
+}
+
+fn eval_lt_query(subject: &Oexp, object: &Oexp, _env: &mut Model) -> Result<Oexp, RomeError> {
+        match (subject, object) { 
+        (Oexp::Number(a), Oexp::Number(b)) => Ok(Oexp::Boolean(a < b)),
+        _ => Err(RomeError::OperatorError("Can compare only two numbers (as of now)".to_string())),
+        }
+
+}
+
+fn eval_eq_query(subject: &Oexp, object: &Oexp, _env: &mut Model) -> Result<Oexp, RomeError> {
+        match (subject, object) { 
+        (Oexp::Number(a), Oexp::Number(b)) => Ok(Oexp::Boolean(a == b)),
+        _ => Err(RomeError::OperatorError("Can compare only two numbers (as of now)".to_string())),
+        }
+
+}
+
+fn eval_geq_query(subject: &Oexp, object: &Oexp, _env: &mut Model) -> Result<Oexp, RomeError> {
+        match (subject, object) { 
+        (Oexp::Number(a), Oexp::Number(b)) => Ok(Oexp::Boolean(a >= b)),
+        _ => Err(RomeError::OperatorError("Can compare only two numbers (as of now)".to_string())),
+        }
+
+}
+
+fn eval_leq_query(subject: &Oexp, object: &Oexp, _env: &mut Model) -> Result<Oexp, RomeError> {
+        match (subject, object) { 
+        (Oexp::Number(a), Oexp::Number(b)) => Ok(Oexp::Boolean(a <= b)),
+        _ => Err(RomeError::OperatorError("Can compare only two numbers (as of now)".to_string())),
+        }
+
+}
+
+fn eval_neq_query(subject: &Oexp, object: &Oexp, _env: &mut Model) -> Result<Oexp, RomeError> {
+        match (subject, object) { 
+        (Oexp::Number(a), Oexp::Number(b)) => Ok(Oexp::Boolean(a != b)),
         _ => Err(RomeError::OperatorError("Can compare only two numbers (as of now)".to_string())),
         }
 

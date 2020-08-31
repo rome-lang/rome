@@ -20,6 +20,7 @@ fn slurp_input() -> String {
 
 fn main() {
     let env = &mut rome::new_core_model();
+    println!("-- Ask in Roman, when O. prompts --");
     loop {
         println!("O. ");
         let input = slurp_input();
