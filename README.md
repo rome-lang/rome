@@ -89,7 +89,6 @@ x = 5
 ```
 
 This means, we are telling the computer that x from now-onwards has the value 5. 
-In Lisp (Scheme dialect) this would be:
 
 And when we write:
 
