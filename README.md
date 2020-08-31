@@ -149,23 +149,27 @@ Here, `def` is the procedure (ok, it’s actually a special form, but that disti
 
 In Roman, we will do the equivalent by the following expression:
 
-```
+```roman
+
 (x = 5 .)
+
 ```
 
 Actually, to make it easier for humans, Roman automatically supplies the outermost enclosing parenthesis. So the above Roman expression can be written simply as:
 
-```
+```roman
+
 x = 5 .
+
 ```
 
 Let’s break down how this works in Roman.
 
 As you know, in Roman, the convention is the very last symbol in the expression is the function name and the rest of the items is considered as it’s arguments. 
 
-### Introducing the Roman PERIOD ( . )  operator. Maker of definitions.
+### Introducing the Roman PERIOD ( . )  operator, maker of definitions.
 
-In Roman, the full-stop punctuation (aka period) symbol is the equivalent of `def` or `define` in Lisp. (As in `(def x 5)`
+In Roman, the full-stop punctuation (aka period) symbol is the equivalent of `def` or `define` in Lisp. (As in `(def x 5)`)
 
 In Roman, the PERIOD takes three (instead of two in Lisp) arguments
 	* A name for the variable (`x`) 
@@ -175,9 +179,12 @@ In Roman, the PERIOD takes three (instead of two in Lisp) arguments
 Since the symbol denoting the “realtion” between “name and “value” is explicit, we can handle definitions like the following.
 
 ```
+
 x > 4 .
 x < 6 .
-```)
+
+```
+
 
 Also notice that the “relation” symbol is passed in as the second argument from the head of the list. This is another Roman convention. All three symbols are just arguments to the period operator( . ). We could just as well  ave defined `.` to take them in a different order. It’s just that we chose to have the “relation” symbol to be in the second position.
 
@@ -191,6 +198,7 @@ Note that (`.`) etc are not any kind of exception to the rule in Roman. Sure, it
 4 2 -
 
 4 square
+
 ```
 
 These will print out, respectively `6`, `2` and `16` (assuming square is a known function, we will come to defining functions shortly).
@@ -219,9 +227,9 @@ x if (x > 0 ?) else -x ?
 
 Here the verb passed-in to `?` is `if`. And the definition of the branch of code that handles the `if` verb takes three arguments as **objects** apart from the **subject** (`x`). 
 
-	* The first is a another `?` query that returns true or false
-	* The second object is the “keyword” `else` 
-	* The third is another value expression `-x` which is returned if the predicate expression (the first object) returns false.
+* The first is a another `?` query that returns true or false
+* The second object is the “keyword” `else` 
+* The third is another value expression `-x` which is returned if the predicate expression (the first object) returns false.
 
 ### How to define a function (lambda) in Roman
 
@@ -231,11 +239,13 @@ Here’s how we write an anonymous function definition in Roman
 (a) => (a 1 +) fn
 ```
 
+
 If you wish to give a name to your function you would do
 
 ```
 square = (x => (x x *) fn) .
 ```
+
 
 Here `fn` is the function. And  `=>` is treated as the verb to  `fn` . The **subject** is either a symbol or a list which is treated as argument list and the third item, the **object** is the body of the function.
 
@@ -247,7 +257,9 @@ In Roman, side effects like printing to the STDOUT is modeled as a message sent 
 
 ```
 a !
+
 ```
+
 
 Roman calls `!` the “ping” operator. 
 
@@ -257,24 +269,24 @@ Roman uses two dashes `-- ` to denote a one liner comments (like in Elm) and a p
 
 To comment out code so that Roman’s evalutor won’t complain, we use a semi-colon to end the expression `;`. Called a “Hole” operator, it signals to Rome (the Roman interpreter) that this expression is under construction and the programmer would like to ignore the warning and error messages for now. (To mark a bigger block of code as under construction, we just need to surround it with parenthesis and add a `;` at the end.
 
-Oh my, this became quite a long article. Perhaps, now we can play around with my barely functioning, frail and potentially underwhelming prototype of the Roman interpreter (called Rome).
+Oh my, this became quite a long article. Perhaps, *now* we can play around with my barely functioning, frail and potentially underwhelming prototype of the Roman interpreter (aka Rome).
 
 (Warning: comments and holes are not yet implemented in the Rome prototype)
 
 Oh one last thing…
 
 ## What’s in a name
-Rome is short for Recursive Omicron Meta Evaluator. 
+Rome is short for **Recursive Omicron Meta Evaluator**. 
 
 This is because we chose the capital Omicron symbol to denote O-expressions. 
 
 
-The program language is itself called Roman which is short for Recursive OMicron Algebraic Notation, because you know after all Algebra is nothing but the manipulation of symbols along with a notation or way to describe those manipulations.
+The program language is itself called Roman which is short for **Recursive OMicron Algebraic Notation**, because you know, after all Algebra is nothing but the manipulation of symbols along with a notation or way to describe those manipulations.
 
 Plus you know……. the domain name was available.
 
 ## Thanks
-A special thanks to Stephan, on whose tall shoulders, I stood to figure out how to express all these ideas in Rust. He in turn based his Rusty Lisp interpreter on Norvig’s Lispy. 
+A special thanks to [Stepan](https://stopa.io/post/222), on whose tall shoulders, I stood, to figure out how to express all these ideas in Rust. He in turn based his Rusty Lisp interpreter on Norvig’s Lispy. 
 
 It was Paul Graham’s essays that introduced me to Lisp in one of his essays more than 7 years ago, along with Fred Brook’s mythical man month which expounded on the mind-altering experience that Lisp is. 
 
