@@ -110,7 +110,7 @@ if(x > y) print "true"; // should print "true"
 
 If our programming language supports **telling** computers facts of any kind, and not just about equality, our programs would be more expressive don’t you think?
 
-Of course, this is nothing new.  (Old wine in new bottle and all that…)
+Of course, this is nothing new.
 
 Prolog has supported this kind of assertions and queries for a long time, and so has SAT solvers for similar logical reasoning.
 
@@ -173,11 +173,12 @@ As you know, in Roman, the convention is the very last symbol in the expression 
 In Roman, the full-stop punctuation (aka period) symbol is the equivalent of `def` or `define` in Lisp. (As in `(def x 5)`)
 
 In Roman, the PERIOD takes three (instead of two in Lisp) arguments
-	* A name for the variable (`x`) 
-	* A value (`5`) 
-	* A symbol denoting the “relation” between name and value (`=`)
 
-Since the symbol denoting the “realtion” between “name and “value” is explicit, we can handle definitions like the following.
+* A name for the variable (`x`) 
+* A value (`5`) 
+* A symbol denoting the “relation” between name and value (`=`)
+
+Since the symbol denoting the “relation” between “name and “value” is explicit, we can handle definitions like the following:
 
 ```
 
