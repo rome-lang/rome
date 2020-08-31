@@ -1,7 +1,9 @@
 # Roman, a Lisp like programming language in the 4th dimension.
 Roman is Lisp extended to 4-dimensions. 
 
-The foundational idea of this programming language is simple enough to fit in a tweet.
+The foundational idea of this programming language is simple enough to fit in a tweet 
+
+(see image "omicron_tweet.png")
 
 (With the caveat that you are already familiar with Lisp’s s-expressions, RDF triplets and Datomic, a database designed by Rich Hickey who also designed Clojure, a popular, modern dialect of Lisp targeting the JVM ecosystem).
 
