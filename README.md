@@ -1,5 +1,5 @@
-# Roman, a Lisp like programming language in the 4th dimension.
-Roman is Lisp extended to 4-dimensions. 
+# Rome, a Lisp like programming language in the 4th dimension.
+Rome is Lisp extended to 4-dimensions. 
 
 The foundational idea of this programming language is simple enough to fit in a tweet 
 
